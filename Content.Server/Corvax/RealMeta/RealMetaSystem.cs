@@ -66,7 +66,7 @@ public sealed class RealMetaSystem : EntitySystem
     {
         if (HasComp<GhostComponent>(user) || IsTraitor(user))
         {
-           SetFakeMeta(uid);
+            SetFakeMeta(uid);
         }
         else
         {

@@ -13,8 +13,8 @@
   - type: Item
     sprite: Objects/Tools/emag.rsi
   - type: TrueData
-    name: uplink-emag-name
-    desc: uplink-emag-desc
+    name: TEST-FAKE-NAME
+    desc: TEST-FAKE-DESC
 
 - type: entity
   parent: BaseItem
