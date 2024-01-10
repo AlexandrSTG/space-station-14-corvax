@@ -51,10 +51,10 @@ public sealed class RealMetaSystem : EntitySystem
 
     private void StartupComponent(EntityUid uid, RealMetaComponent component, ComponentStartup args)
 
-    => SetFakeMeta(uid);
+    => SetTrueMeta(uid, component);
     private void ShutdownComponent(EntityUid uid, RealMetaComponent component, ComponentShutdown args)
 
-    => SetTrueMeta(uid, component);
+    => SetFakeMeta(uid, component);
     private void OnExamined(EntityUid uid, RealMetaComponent component, ExaminedEvent args)
 
     => SetMeta(uid, component, args.Examiner);
@@ -66,27 +66,27 @@ public sealed class RealMetaSystem : EntitySystem
     {
         if (HasComp<GhostComponent>(user) || IsTraitor(user))
         {
-            SetFakeMeta(uid);
+            SetTrueMeta(uid, component);
         }
         else
         {
-            SetTrueMeta(uid, component);
+            SetFakeMeta(uid, component);
         }
     }
 
-    private void SetTrueMeta(EntityUid uid,  RealMetaComponent component)
+    private void SetTrueMeta(EntityUid uid, RealMetaComponent component)
     {
          if (TryComp<MetaDataComponent>(uid, out var meta))
         {
             var proto = meta.EntityPrototype;
         if (proto == null)
             return;
-        _metaSystem.SetEntityName(uid, Loc.GetString(component.Name) + '\n' + "[color=#616F71]" + proto.Name);
-        _metaSystem.SetEntityDescription(uid, Loc.GetString(component.Desc) +'\n' + "[color=#616F71]" + proto.Description);
+        _metaSystem.SetEntityName(uid, proto.Name + '\n' + "[bold]" + Loc.GetString(component.Name));
+        _metaSystem.SetEntityDescription(uid, proto.Description + '\n' + "[bold]" + Loc.GetString(component.Desc));
         }
     }
 
-    private void SetFakeMeta(EntityUid uid)
+    private void SetFakeMeta(EntityUid uid, RealMetaComponent component)
     {
         if (TryComp<MetaDataComponent>(uid, out var meta))
         {

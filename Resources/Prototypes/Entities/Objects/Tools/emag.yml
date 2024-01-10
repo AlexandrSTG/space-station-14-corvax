@@ -12,9 +12,26 @@
     state: icon
   - type: Item
     sprite: Objects/Tools/emag.rsi
-  - type: TrueData
-    name: TEST-FAKE-NAME
-    desc: TEST-FAKE-DESC
+
+- type: entity
+  parent: BaseItem
+  id: TESTEREMAG
+  name: TEST-TRUE-NAME
+  description: TEST-TRUE-DESC
+  components:
+  - type: Emag
+  - type: LimitedCharges
+  - type: AutoRecharge
+  - type: Sprite
+    sprite: Objects/Tools/emag.rsi
+    state: icon
+  - type: Item
+    sprite: Objects/Tools/emag.rsi
+  - type: RealMeta
+    name: 'TEST-FAKE-NAME'
+    desc: 'TEST-FAKE-DESC'
+  - type: Hypospray
+    onlyMobs: false
 
 - type: entity
   parent: BaseItem
