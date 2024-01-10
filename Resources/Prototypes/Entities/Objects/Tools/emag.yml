@@ -12,6 +12,9 @@
     state: icon
   - type: Item
     sprite: Objects/Tools/emag.rsi
+  - type: TrueData
+    name: uplink-emag-name
+    desc: uplink-emag-desc
 
 - type: entity
   parent: BaseItem

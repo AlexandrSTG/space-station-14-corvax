@@ -38,68 +38,69 @@ public sealed class RealMetaSystem : EntitySystem
     [Dependency] private readonly SharedMindSystem _mindSystem = default!;
     [Dependency] private readonly MetaDataSystem _metaSystem = default!;
 
-public override void Initialize()
-{
-    base.Initialize();
-
-    SubscribeLocalEvent <RealMetaComponent, ComponentStartup>(StartupComponent);
-    SubscribeLocalEvent <RealMetaComponent, ComponentShutdown>(ShutdownComponent);
-    SubscribeLocalEvent <RealMetaComponent, ExaminedEvent>(OnExamined);
-    SubscribeLocalEvent <RealMetaComponent, EquippedHandEvent>(OnPickup);
-
-}
-
-private void StartupComponent(EntityUid uid, RealMetaComponent component, ComponentStartup args)
-
-=> SetFakeMeta(uid);
-private void ShutdownComponent(EntityUid uid, RealMetaComponent component, ComponentShutdown args)
-
-=> SetTrueMeta(uid, component);
-private void OnExamined(EntityUid uid, RealMetaComponent component, ExaminedEvent args)
-
-=> SetMeta(uid, component, args.Examiner);
-private void OnPickup(EntityUid uid, RealMetaComponent component, EquippedHandEvent args)
-
-=> SetMeta(uid, component, args.User);
-
-private void SetMeta(EntityUid uid, RealMetaComponent component, EntityUid user)
-{
-    if (HasComp<GhostComponent>(user) || IsTraitor(user))
+    public override void Initialize()
     {
-        SetFakeMeta(uid);
+        base.Initialize();
+
+        SubscribeLocalEvent<RealMetaComponent, ComponentStartup>(StartupComponent);
+        SubscribeLocalEvent<RealMetaComponent, ComponentShutdown>(ShutdownComponent);
+        SubscribeLocalEvent<RealMetaComponent, ExaminedEvent>(OnExamined);
+        SubscribeLocalEvent<RealMetaComponent, EquippedHandEvent>(OnPickup);
+
     }
-    else
-    {
-        SetTrueMeta(uid, component);
-    }
-}
 
-private void SetTrueMeta(EntityUid uid, RealMetaComponent component)
-{
-     if (TryComp<MetaDataComponent>(uid, out var meta))
-    {
-        var proto = meta.EntityPrototype;
-    if (proto == null)
-        return;
-    _metaSystem.SetEntityName(uid, proto.Name);
-    _metaSystem.SetEntityDescription(uid, proto.Description);
-    }
-}
+    private void StartupComponent(EntityUid uid, RealMetaComponent component, ComponentStartup args)
 
-private void SetFakeMeta(EntityUid uid)
-{
-    if (TryComp<MetaDataComponent>(uid, out var meta))
+    => SetFakeMeta(uid);
+    private void ShutdownComponent(EntityUid uid, RealMetaComponent component, ComponentShutdown args)
+
+    => SetTrueMeta(uid, component);
+    private void OnExamined(EntityUid uid, RealMetaComponent component, ExaminedEvent args)
+
+    => SetMeta(uid, component, args.Examiner);
+    private void OnPickup(EntityUid uid, RealMetaComponent component, EquippedHandEvent args)
+
+    => SetMeta(uid, component, args.User);
+
+    private void SetMeta(EntityUid uid, RealMetaComponent component, EntityUid user)
     {
-        var proto = meta.EntityPrototype;
+        if (HasComp<GhostComponent>(user) || IsTraitor(user))
+        {
+           SetFakeMeta(uid);
+        }
+        else
+        {
+            SetTrueMeta(uid, component);
+        }
+    }
+
+    private void SetTrueMeta(EntityUid uid,  RealMetaComponent component)
+    {
+         if (TryComp<MetaDataComponent>(uid, out var meta))
+        {
+            var proto = meta.EntityPrototype;
         if (proto == null)
             return;
-
-        _metaSystem.SetEntityName(uid, proto.Name +'\n'+ "[color=#616F71]" + Loc.GetString(component.Name));
-        _metaSystem.SetEntityDescription(uid, proto.Description+'\n'+ "[color=#616F71]" + component.Desc);
+        _metaSystem.SetEntityName(uid, Loc.GetString(component.Name) + '\n' + "[color=#616F71]" + proto.Name);
+        _metaSystem.SetEntityDescription(uid, Loc.GetString(component.Desc) +'\n' + "[color=#616F71]" + proto.Description);
+        }
     }
-}
-private bool IsTraitor(EntityUid user)
-{
-    return _mindSystem.TryGetMind(user, out var mindId, out _) && _sharedRole.MindIsAntagonist(mindId);
-}
+
+    private void SetFakeMeta(EntityUid uid)
+    {
+        if (TryComp<MetaDataComponent>(uid, out var meta))
+        {
+            var proto = meta.EntityPrototype;
+            if (proto == null)
+                 return;
+
+            _metaSystem.SetEntityName(uid, proto.Name);
+            _metaSystem.SetEntityDescription(uid, proto.Description);
+        }
+    }
+
+    private bool IsTraitor(EntityUid user)
+    {
+        return _mindSystem.TryGetMind(user, out var mindId, out _) && _sharedRole.MindIsAntagonist(mindId);
+    }
 }
