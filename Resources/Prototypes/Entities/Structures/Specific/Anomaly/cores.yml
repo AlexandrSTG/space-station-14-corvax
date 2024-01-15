@@ -23,7 +23,7 @@
   - type: ItemCooldown
   - type: EmitSoundOnUse #placeholder for future unical mechanic
     sound:
-      collection: RadiationPulse 
+      collection: RadiationPulse
   - type: UseDelay
     delay: 2
   - type: AnomalyCore
@@ -249,3 +249,36 @@
     energy: 2.0
     color: "#ffffaa"
     castShadows: false
+
+#InvisAnomaly
+- type: entity
+  parent: BaseAnomalyInertCore
+  id: AnomalyCoreStealthInert
+  suffix: Invise
+  components:
+  - type: Sprite
+    sprite: Structures/Specific/Anomalies/Cores/flesh_core.rsi
+  - type: PointLight
+    radius: 1.5
+    energy: 3.5
+    color: "#103486"
+    castShadows: false
+
+#InvisAnomalyInert
+- type: entity
+  parent: BaseAnomalyInertCore
+  id: AnomalyCoreStealthInert
+  suffix: InviseInert, Stealth
+  components:
+  - type: Sprite
+    sprite: Structures/Specific/Anomalies/Cores/flesh_core.rsi
+  - type: PointLight
+    radius: 10.5
+    energy: 3.5
+    color: "#103486"
+    castShadows: false
+  - type: Stealth
+
+  - type: StealthOnMove
+    passiveVisibilityRate:  0.001
+    movementVisibilityRate: 0.01

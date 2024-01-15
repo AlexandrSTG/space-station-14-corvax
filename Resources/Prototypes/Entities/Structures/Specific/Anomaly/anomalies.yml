@@ -321,7 +321,7 @@
       types:
         Slash: 1
   - type: EntitySpawnAnomaly
-    superCriticalSpawns: 
+    superCriticalSpawns:
     - ReagentSlimeSpawner
     spawns:
       - PuddleSparkle
@@ -399,3 +399,28 @@
     solution: anomaly
   - type: InjectableSolution
     solution: beaker
+
+# new Stealth anomaly
+- type: entity
+  id: AnomalStealth
+  parent: BaseAnomaly
+  suffix: StealthAnomaly
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: Structures/Storage/closet.rsi
+    layers:
+    - state: cardboard
+      map: [".StorenumageVisualLayers.Base"]
+  - type: StealthAnomaly
+  - type: Anomaly
+    corePrototype: AnomalyCoreStealth
+    coreInertPrototype: AnomalyCoreStealthInert
+  - type: PointLight
+    radius: 2.0
+    energy: 7.5
+    color: "#103486"
+  - type: Stealth
+  - type: StealthOnMove
+    passiveVisibilityRate: -0.02
+    movementVisibilityRate: 0.00
