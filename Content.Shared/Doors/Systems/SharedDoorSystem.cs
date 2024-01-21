@@ -16,6 +16,8 @@ using Robust.Shared.Physics.Systems;
 using Robust.Shared.Timing;
 using Content.Shared.Prying.Components;
 using Robust.Shared.Audio.Systems;
+using Content.Shared.Stealth.Components;
+using Linguini.Syntax.Ast;
 
 namespace Content.Shared.Doors.Systems;
 
@@ -25,6 +27,7 @@ public abstract class SharedDoorSystem : EntitySystem
     [Dependency] protected readonly SharedPhysicsSystem PhysicsSystem = default!;
     [Dependency] private readonly DamageableSystem _damageableSystem = default!;
     [Dependency] private readonly SharedStunSystem _stunSystem = default!;
+    [Dependency] private readonly IEntityManager _entityManager = default!;
     [Dependency] protected readonly TagSystem Tags = default!;
     [Dependency] protected readonly SharedAudioSystem Audio = default!;
     [Dependency] private readonly EntityLookupSystem _entityLookup = default!;
@@ -400,7 +403,11 @@ public abstract class SharedDoorSystem : EntitySystem
 
         if (!collidable)
             door.CurrentlyCrushing.Clear();
-
+        if (_entityManager.HasComponent<StealthComponent>(uid))
+        {
+            _occluder.SetEnabled(uid, false, occluder);
+            return;
+        }
         if (door.Occludes)
             _occluder.SetEnabled(uid, collidable, occluder);
     }
@@ -460,7 +467,7 @@ public abstract class SharedDoorSystem : EntitySystem
             //If the colliding entity is a slippable item ignore it by the airlock
             if (otherPhysics.CollisionLayer == (int)CollisionGroup.SlipLayer && otherPhysics.CollisionMask == (int)CollisionGroup.ItemMask)
                 continue;
-            
+
             //For when doors need to close over conveyor belts
             if (otherPhysics.CollisionLayer == (int) CollisionGroup.ConveyorMask)
                 continue;

@@ -267,7 +267,7 @@
 #InvisAnomalyInert
 - type: entity
   parent: BaseAnomalyInertCore
-  id: AnomalyCoreStealthInert
+  id: AnomalyCoreStealth
   suffix: InviseInert, Stealth
   components:
   - type: Sprite
@@ -278,7 +278,7 @@
     color: "#103486"
     castShadows: false
   - type: Stealth
-
+    LastVisibility: -1
   - type: StealthOnMove
-    passiveVisibilityRate:  0.001
-    movementVisibilityRate: 0.01
+    passiveVisibilityRate:  0.003
+    movementVisibilityRate: 0.005

@@ -188,6 +188,20 @@ public abstract class SharedStealthSystem : EntitySystem
         return Math.Clamp(component.LastVisibility + ev.FlatModifier, component.MinVisibility, component.MaxVisibility);
     }
 
+    public void ModifyStealthOnMove(EntityUid uid, float passiveGain, float movementPayment, StealthComponent? stealthComponent = null, StealthOnMoveComponent? somComponent = null)
+    {
+
+        if (!Resolve(uid, ref stealthComponent) || !stealthComponent.Enabled || !Resolve(uid, ref somComponent))
+            return;
+        else
+        {
+            somComponent.MovementVisibilityRate = movementPayment;
+            somComponent.PassiveVisibilityRate = passiveGain;
+            // TODO change 0f and of to timing last change
+            var ev = new GetVisibilityModifiersEvent(uid, stealthComponent, 0f, 0f);
+            RaiseLocalEvent(uid, ev, false);
+        }
+    }
     /// <summary>
     ///     Used to run through any stealth effecting components on the entity.
     /// </summary>
@@ -208,5 +222,33 @@ public abstract class SharedStealthSystem : EntitySystem
             SecondsSinceUpdate = secondsSinceUpdate;
             FlatModifier = flatModifier;
         }
+
+
     }
+
+    // private sealed class OnModifyStealthOnMoveEvent : EntityEventArgs
+    // {
+    //     public readonly EntityUid Uid;
+    //     public readonly StealthComponent SOM;
+
+    //     public readonly float SecondsSinceUpdate;
+
+    //     /// <summary>
+    //     ///     Calculate this and add to it. Do not divide, multiply, or overwrite.
+    //     ///     The sum will be added to the stealth component's visibility.
+    //     /// </summary>
+    //     public float Value1;
+    //     public float Value2;
+
+    //     public OnModifyStealthOnMoveEvent(EntityUid uid, StealthComponent stealth, float secondsSinceUpdate,  float value1, float value2)
+    //     {
+    //         Uid = uid;
+    //         SOM = stealth;
+    //         SecondsSinceUpdate = secondsSinceUpdate;
+    //         Value1 = value1;
+    //         Value2 = value2;
+    //     }
+
+
+    // }
 }

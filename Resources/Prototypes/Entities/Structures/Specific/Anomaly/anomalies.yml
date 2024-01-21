@@ -407,20 +407,42 @@
   suffix: StealthAnomaly
   components:
   - type: Sprite
-    noRot: true
-    sprite: Structures/Storage/closet.rsi
     layers:
-    - state: cardboard
-      map: [".StorenumageVisualLayers.Base"]
-  - type: StealthAnomaly
+    - state: anom7
+      map: ["enum.AnomalyVisualLayers.Base"]
+    - state: anom7-pulse
+      map: ["enum.AnomalyVisualLayers.Animated"]
+      visible: false
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        density: 100
+        mask:
+          - MobMask
+        layer:
+          - MobLayer
+        hard: true
   - type: Anomaly
+    anomalyContactDamage:
+      types:
+        Radiation: 70
+  - type: AmbientSound
+    enabled: false
     corePrototype: AnomalyCoreStealth
     coreInertPrototype: AnomalyCoreStealthInert
-  - type: PointLight
-    radius: 2.0
-    energy: 7.5
-    color: "#103486"
   - type: Stealth
   - type: StealthOnMove
     passiveVisibilityRate: -0.02
     movementVisibilityRate: 0.00
+  - type: EmitSoundOnSpawn
+    sound:
+      path: /Audio/Effects/chime.ogg
+    params:
+      volume: 0
+  - type: StealthAnomaly
+  - type: Access #Why? Because it opens everything on path
+    groups:
+    - AllAccess
